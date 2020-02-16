@@ -4,7 +4,6 @@ import os
 import requests
 import json
 import time
-from pprint import pprint
 
 nvr_addr = os.getenv('NVR_ADDR', 'reolink.local')
 nvr_user = os.getenv('NVR_USER', 'admin')
@@ -57,11 +56,18 @@ while True:
       log.error("EXCEPTION: " + str(em))
 
     # exec reboot
-    payload = '[{cmd: "Reboot", action: 0, param: {}}]'
     cmd = 'Reboot'
     url = '{}://{}:{}/{}{}&token={}'.format(nvr_meth, nvr_addr, nvr_port, cgi_uri, cmd, token)
     ret = requests.get(url).json()
-    pprint(ret)
+    log.info(ret)
+
+
+  # logout
+  cmd = 'Logout'
+  url = '{}://{}:{}/{}{}&token={}'.format(nvr_meth, nvr_addr, nvr_port, cgi_uri, cmd, token)
+  ret = requests.get(url).json()
+  log.info(ret)
+
 
   log.info("sleeping {} seconds...".format(poll_int))
   time.sleep(int(poll_int))
