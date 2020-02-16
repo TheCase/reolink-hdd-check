@@ -17,6 +17,11 @@ spec:
       - name: reolink-hdd-check
         image: thecase/reolink-hdd-check:latest
         env:
+        - name: NVR_ADDR
+          valueFrom:
+            secretKeyRef:
+              name: "reolink-nvr"
+              key: "address"
         - name: NVR_PASS
           valueFrom:
             secretKeyRef:
