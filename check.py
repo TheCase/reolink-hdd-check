@@ -32,6 +32,9 @@ while True:
   url = '{}://{}:{}/{}{}'.format(nvr_meth, nvr_addr, nvr_port, cgi_uri, cmd)
   ret = requests.post(url, data=json.dumps(payload)).json()
   token = ret[0]['value']['Token']['name']
+  
+  # init rebooted state
+  rebooted = False
 
   # get hdd status
   cmd = 'GetHddInfo'
@@ -60,14 +63,14 @@ while True:
     url = '{}://{}:{}/{}{}&token={}'.format(nvr_meth, nvr_addr, nvr_port, cgi_uri, cmd, token)
     ret = requests.get(url).json()
     log.info(ret)
+    rebooted = True
 
-
-  # logout
-  cmd = 'Logout'
-  url = '{}://{}:{}/{}{}&token={}'.format(nvr_meth, nvr_addr, nvr_port, cgi_uri, cmd, token)
-  ret = requests.get(url).json()
-  log.info(ret)
-
+  # logout - skip if we rebooted
+  if not rebooted:
+    cmd = 'Logout'
+    url = '{}://{}:{}/{}{}&token={}'.format(nvr_meth, nvr_addr, nvr_port, cgi_uri, cmd, token)
+    ret = requests.get(url).json()
+    log.info(ret)
 
   log.info("sleeping {} seconds...".format(poll_int))
   time.sleep(int(poll_int))
