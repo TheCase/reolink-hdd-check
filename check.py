@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
+import sys
 import os
 import requests
 import json
 import time
+from pprint import pprint
 
 nvr_addr = os.getenv('NVR_ADDR', 'reolink.local')
 nvr_user = os.getenv('NVR_USER', 'admin')
@@ -31,8 +33,11 @@ while True:
   cmd = 'Login'
   url = '{}://{}:{}/{}{}'.format(nvr_meth, nvr_addr, nvr_port, cgi_uri, cmd)
   ret = requests.post(url, data=json.dumps(payload)).json()
+  if 'error' in ret[0]:
+    log.error('login error: {}'.format(ret))
+    sys.exit(ret[0]['code'])
   token = ret[0]['value']['Token']['name']
-  
+
   # init rebooted state
   rebooted = False
 
