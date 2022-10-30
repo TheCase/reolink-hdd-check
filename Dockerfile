@@ -2,7 +2,7 @@ FROM python:3.12-rc-slim-buster
 
 ADD . /
 
-RUN pip install -r requirements.txt
+RUN pip install -r /requirements.txt
 
 ENV NVR_METH=http
 ENV NVR_ADDR=reolink-nvr.local
