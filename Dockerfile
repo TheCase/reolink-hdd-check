@@ -1,4 +1,4 @@
-FROM python:3.12-rc-slim
+FROM python:alpine3.17
 
 ADD . /
 
